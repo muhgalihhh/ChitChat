@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'dist' // Menetapkan direktori output untuk build
+    outDir: 'frontend/dist', // Ensure this matches your expected output directory
+    emptyOutDir: true, // Ensure existing contents are cleaned before build
   }
 });
