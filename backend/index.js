@@ -3,11 +3,11 @@ import dotenv from 'dotenv';
 import express from 'express';
 import connectToMongoDB from './db/connectToMongoDB.js';
 import authRoutes from './routes/auth.routes.js';
-import messageRoutes from './routes/message.routes.js';
+import friendshipRoutes from './routes/friendship.routes.js';
 import groupRoutes from './routes/group.routes.js';
 import groupMessageRoutes from './routes/groupMessage.routes.js';
+import messageRoutes from './routes/message.routes.js';
 import userRoutes from './routes/user.routes.js';
-import friendshipRoutes from './routes/friendship.routes.js';
 import { app, server } from './socket/socket.js';
 
 dotenv.config();
@@ -23,12 +23,11 @@ app.use('/api/groups', groupRoutes); // middleware
 app.use('/api/group-messages', groupMessageRoutes); // middleware
 app.use('/api/friend-list', friendshipRoutes); // middleware
 
-// app.get('/', (req, res) => {
-//   // root route http://localhost:5000/
-//   res.send('Hai World');
-// });
+app.get('/', (req, res) => {
+  // root route http://localhost:5000/
+  res.send('Hai World');
+});
 
 server.listen(PORT, () => {
   connectToMongoDB();
-  console.log('Server is running on port ' + PORT);
 });
