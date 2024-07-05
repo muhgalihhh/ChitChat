@@ -91,8 +91,10 @@ export const addFriend = async (req, res) => {
   try {
     // Check if the friendship request exists and is pending
     const friendship = await Friendship.findOne({
-      userId: friendId, // Friend requested to logged in user
-      friendId: userId, // Logged in user is the friendId
+      $or: [
+        { userId, friendId },
+        { userId: friendId, friendId: userId },
+      ],
       status: false, // Pending request
     });
 
@@ -121,8 +123,10 @@ export const rejectFriend = async (req, res) => {
   try {
     // Check if the friendship request exists and is pending
     const friendship = await Friendship.findOneAndDelete({
-      userId: friendId, // Friend requested to logged in user
-      friendId: userId, // Logged in user is the friendId
+      $or: [
+        { userId, friendId },
+        { userId: friendId, friendId: userId },
+      ],
       status: false, // Pending request
     });
 
@@ -170,5 +174,26 @@ export const searchFriend = async (req, res) => {
   } catch (error) {
     console.log('Error in searchFriend controller: ', error.message);
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getRequestFriendship = async (req, res) => {
+  // Get the logged-in user's ID
+  const userId = req.user._id;
+
+  try {
+    const pendingRequests = await Friendship.find({
+      friendId: userId, // Logged in user is the friendId
+      status: false,
+    }).populate('userId', 'username fullName profilePicture'); // Adjust fields to populate as needed
+
+    // Filter to only include user info
+    const users = pendingRequests.map((request) => {
+      return request.userId;
+    });
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching friend requests:', error);
+    res.status(500).json({ error: 'Failed to fetch friend requests' });
   }
 };
