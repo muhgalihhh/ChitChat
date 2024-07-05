@@ -23,10 +23,10 @@ app.use('/api/groups', groupRoutes); // middleware
 app.use('/api/group-messages', groupMessageRoutes); // middleware
 app.use('/api/friend-list', friendshipRoutes); // middleware
 
-// app.get('/', (req, res) => {
-//   // root route http://localhost:5000/
-//   res.send('Hai World');
-// });
+app.get('/', (req, res) => {
+  // root route http://localhost:5000/
+  res.send('Hai World');
+});
 
 server.listen(PORT, () => {
   connectToMongoDB();
