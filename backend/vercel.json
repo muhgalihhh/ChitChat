@@ -1,11 +1,4 @@
-
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/"
-    }
-  ],
   "version": 2,
   "builds": [
     {
@@ -18,5 +11,5 @@
       "src": "/api/(.*)",
       "dest": "/api/$1"
     }
-  ],
+  ]
 }
