@@ -16,7 +16,7 @@ const ModalDetailGroup = ({ isOpen, onClose, group }) => {
   };
 
   return (
-    <dialog id="modalDetailGroup" className="modal modal-open transition-opacity duration-300 ease-in-out opacity-100">
+    <dialog id="modalDetailGroup" className="modal modal-open transition-opacity duration-300 ease-in-out opacity-100 sm:modal-middle">
       <div className="modal-box bg-white p-6 rounded-lg shadow-xl">
         <h3 className="font-bold text-2xl mb-6 text-center">Group Details</h3>
         <div className="mb-4">

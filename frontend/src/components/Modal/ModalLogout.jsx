@@ -5,7 +5,7 @@ const ModalLogout = ({ isOpen, onClose }) => {
   const { loading, logout } = useLogout();
   return (
     <>
-      <dialog id="modalLogout" className={`modal ${isOpen ? 'modal-open' : 'modal-close'} transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+      <dialog id="modalLogout" className={`sm:modal-middle modal ${isOpen ? 'modal-open' : 'modal-close'} transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
         <div className="modal-box text-slate-900">
           <h3 className="font-bold text-lg">Apakah Anda Yakin?!</h3>
           <p className="py-4">Klik Tombol Untuk Keluar</p>

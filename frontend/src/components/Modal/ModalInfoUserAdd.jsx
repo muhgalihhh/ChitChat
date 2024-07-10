@@ -2,7 +2,7 @@ const ModalInfoUserAdd = ({ isOpen, onClose, user }) => {
   if (!user) return null;
 
   return (
-    <dialog id="modalInfoUser" className={`modal ${isOpen ? 'modal-open' : 'modal-close'} transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+    <dialog id="modalInfoUser" className={`sm:modal-middle modal ${isOpen ? 'modal-open' : 'modal-close'} transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
       <div className="modal-box bg-white p-6 rounded-lg shadow-xl">
         <h3 className="font-bold text-2xl mb-6 text-center">User Information</h3>
         <div className="flex flex-col items-center mb-6">

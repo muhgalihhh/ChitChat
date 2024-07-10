@@ -1,17 +1,6 @@
-import { useState } from 'react';
 import useChangeSidebar from '../../zustand/useChangeSidebar';
-import ModalLogout from '../Modal/ModalLogout';
-import LogoutButton from './LogoutButton';
 const Navbar = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { showDefault, showFriendList, showGroupList, activeTab } = useChangeSidebar();
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <>
@@ -41,12 +30,6 @@ const Navbar = () => {
           >
             <i className="fa-solid fa-address-book"></i>
           </button>
-        </div>
-      </div>
-      <div className="flex items-center gap-4">
-        <div className="text-sm font-semibold">
-          <LogoutButton onOpenModal={handleOpenModal} />
-          <ModalLogout isOpen={isModalOpen} onClose={handleCloseModal} />
         </div>
       </div>
     </>
