@@ -18,7 +18,7 @@ const ModalAddGroup = ({ isOpen, onClose, participants }) => {
   };
 
   return (
-    <dialog id="modalAddGroup" className={`modal ${isOpen ? 'modal-open' : 'modal-close'} transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+    <dialog id="modalAddGroup" className={`modal ${isOpen ? 'modal-open' : 'modal-close'} transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'} sm:modal-middle`}>
       <div className="modal-box bg-white p-6 rounded-lg shadow-xl">
         <h3 className="font-bold text-2xl mb-6 text-center">Add Group</h3>
         <form onSubmit={handleSubmit}>
