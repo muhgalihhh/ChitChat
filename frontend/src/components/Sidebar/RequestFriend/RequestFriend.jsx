@@ -1,11 +1,14 @@
-// import React from 'react';
-
+import React, { useState } from 'react';
 import useHandleAcceptFriendship from '../../../hooks/useHandleAcceptFriendship';
 import useHandleRejectFriendship from '../../../hooks/useHandleRejectFriendship';
+import Modal from '../../Modal/ModalInfoUser';
 
 const RequestFriend = ({ user }) => {
   const { acceptFriend } = useHandleAcceptFriendship();
   const { rejectFriend } = useHandleRejectFriendship();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const handleAccept = () => {
     acceptFriend(user._id);
   };
@@ -13,6 +16,17 @@ const RequestFriend = ({ user }) => {
   const handleReject = () => {
     rejectFriend(user._id);
   };
+
+  const handleOpenModal = (user) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
+  };
+
   return (
     <>
       <div className={`flex gap-2 items-center p-2 rounded-md cursor-pointer hover:bg-slate-100 border-b-2`}>
@@ -29,13 +43,16 @@ const RequestFriend = ({ user }) => {
                 <i className="fa-solid fa-check"></i>
               </button>
               <button className="btn bg-error" onClick={handleReject}>
-                {/* detail mata */}
                 <i className="fa-solid fa-xmark"></i>
+              </button>
+              <button className="btn bg-info" onClick={() => handleOpenModal(user)}>
+                <i className="fa-solid fa-info-circle"></i>
               </button>
             </div>
           </div>
         </div>
       </div>
+      {isModalOpen && <Modal isOpen={isModalOpen} onClose={handleCloseModal} user={selectedUser} />}
     </>
   );
 };

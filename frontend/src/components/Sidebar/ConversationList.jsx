@@ -5,7 +5,7 @@ const ConversationList = () => {
   const { loading, conversation } = useGetConversation();
   console.log('conversation:', conversation);
   return (
-    <div className="p-5 flex flex-col">
+    <div className="p-1 flex flex-col w-full">
       {conversation.map((user, idx) => (
         <Conversation key={user._id} conversation={user} lastIdx={idx === conversation.length - 1} />
       ))}
