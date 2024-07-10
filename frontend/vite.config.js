@@ -10,8 +10,4 @@ export default defineConfig({
       '/api': 'http://localhost:5000',
     },
   },
-  build: {
-    outDir: 'frontend/dist', // Ensure this matches your expected output directory
-    emptyOutDir: true, // Ensure existing contents are cleaned before build
-  }
 });
