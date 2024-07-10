@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MessageContainer from '../../components/Messages/MessageContainer';
 import ModalInfoWebsite from '../../components/Modal/ModalInfoWebsite';
-import ModalLogout from '../../components/Modal/ModalLogout';
+import ModalLogout from '../../components/Modal/ModalLogout'; // Pastikan import ModalLogout dari komponen yang sesuai
 import LogoutButton from '../../components/Navbar/LogoutButton';
 import Navbar from '../../components/Navbar/Navbar';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -13,36 +13,44 @@ import useChangeSidebar from '../../zustand/useChangeSidebar';
 const Home = () => {
   const { isMessageVisible } = useVisibility();
   const { isShowDefault, isShowFriendList, isShowGroupList } = useChangeSidebar();
-  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol keadaan modal
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false); // State untuk modal informasi
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); // State untuk modal logout
 
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
+  const handleInfoModalOpen = () => {
+    setIsInfoModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  const handleInfoModalClose = () => {
+    setIsInfoModalOpen(false);
+  };
+
+  const handleLogoutModalOpen = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleLogoutModalClose = () => {
+    setIsLogoutModalOpen(false);
   };
 
   return (
     <>
       <div className="w-screen h-screen bg-slate-200 flex justify-center items-center relative">
         <div className="fixed z-10 bottom-10 right-10">
-          <button className="btn bg-blue-500 text-white py-4 px-4 rounded-lg shadow-md hover:bg-blue-600" onClick={handleModalOpen}>
+          <button className="btn bg-blue-500 text-white py-4 px-4 rounded-lg shadow-md hover:bg-blue-600" onClick={handleInfoModalOpen}>
             <i className="fa-solid fa-info"></i>
           </button>
         </div>
         <div className="w-[90%] h-[90%] relative">
-          <div className="fixed left-[1rem] top-[20%] z-1 hidden md:block">
+          <div className="fixed left-[1rem] top-[20%] z-1">
             <div className="flex justify-between items-center h-[90%] text-white relative flex-col">
               <Navbar />
               <div className="flex items-center gap-4">
                 <div className="text-sm font-semibold">
-                  <LogoutButton onOpenModal={handleModalOpen} />
+                  <LogoutButton onOpenModal={handleLogoutModalOpen} />
                 </div>
               </div>
             </div>
           </div>
-
           <div className="bg-white relative z-2 w-full h-full flex rounded-md overflow-hidden border-b-2" style={{ borderRadius: '1rem' }}>
             {isShowDefault && (
               <div className={`md:flex ${isMessageVisible ? 'hidden' : 'block'} flex flex-col w-full bg-white md:flex lg:w-1/3 xl:w-1/4 h-full p-4 border-slate-400`}>
@@ -65,8 +73,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && <ModalInfoWebsite isOpen={isModalOpen} onClose={handleModalClose} />}
-      {isModalOpen && <ModalLogout isOpen={isModalOpen} onClose={handleModalClose} />}
+      {isInfoModalOpen && <ModalInfoWebsite isOpen={isInfoModalOpen} onClose={handleInfoModalClose} />}
+      {isLogoutModalOpen && <ModalLogout isOpen={isLogoutModalOpen} onClose={handleLogoutModalClose} />}
     </>
   );
 };
