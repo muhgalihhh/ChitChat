@@ -1,17 +1,35 @@
+import React, { useState } from 'react';
 import useRequestFriend from '../../../hooks/useRequestFriend';
+import ModalInfoUserAdd from '../../Modal/ModalInfoUserAdd';
 
 const FriendRequest = ({ display }) => {
   const { requestFriend } = useRequestFriend();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     requestFriend(display._id);
   };
+
+  const handleOpenModal = (display) => {
+    setSelectedUser(display);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
+  };
+
   return (
     <>
-      <div className={`flex gap-2 items-center p-2 rounded-md cursor-pointer hover:bg-slate-100 border-b-2`}>
+      <div className={`flex gap-2 items-center p-2 rounded-md cursor-pointer hover:bg-slate-100 border-b-2 w-full`}>
         <div className={`avatar`}>
-          <div className="w-10 rounded-full">
-            <img alt="user avatars" src={display.profilePicture} />
+          <div className={`avatar`}>
+            <div className="w-10 rounded-full">
+              <img src={display.profilePicture} alt="user avatars" />
+            </div>
           </div>
         </div>
         <div className="flex flex-col flex-1">
@@ -24,14 +42,14 @@ const FriendRequest = ({ display }) => {
                   <i className="fa-solid fa-plus"></i>
                 </button>
               </form>
-              <button className="btn bg-white">
-                {/* detail mata */}
+              <button className="btn bg-white" onClick={() => handleOpenModal(display)}>
                 <i className="fa-solid fa-eye"></i>
               </button>
             </div>
           </div>
         </div>
       </div>
+      <ModalInfoUserAdd isOpen={isModalOpen} onClose={handleCloseModal} user={selectedUser} />
     </>
   );
 };

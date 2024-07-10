@@ -30,7 +30,7 @@ const Conversation = ({ conversation, lastIdx }) => {
 
   return (
     <>
-      <div className={`flex gap-2 items-center p-2 rounded-md cursor-pointer hover:bg-slate-100 ${isSelected ? 'bg-slate-200' : 'bg-white'}`} onClick={handleClick}>
+      <div className={`flex gap-2 items-center p-2 rounded-md cursor-pointer w-full hover:bg-slate-100 ${isSelected ? 'bg-slate-200' : 'bg-white'}`} onClick={handleClick}>
         <div className={`avatar ${isOnline ? 'online' : 'offline'}`}>
           <div className="w-10 rounded-full">
             <img src={conversation.profilePicture} alt="user avatars" />

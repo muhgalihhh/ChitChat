@@ -1,5 +1,4 @@
 import React from 'react';
-import GroupList from './GroupList';
 
 const GroupContainer = () => {
   return (
@@ -7,7 +6,7 @@ const GroupContainer = () => {
       <div className="flex gap-2 items-center rounded-md cursor-pointer flex-col">
         {/* Wrapper div for the search input */}
         {/* search input */}
-        <form action="">
+        <form action="" className="w-full">
           <label className="input input-bordered flex items-center gap-2">
             <input type="text" className="grow" placeholder="Search" />
             <button type="submit">
@@ -17,7 +16,13 @@ const GroupContainer = () => {
             </button>
           </label>
         </form>
-        <GroupList />
+        {/* <GroupList /> */}
+        {/* Buatkan peringatan bahwa fitur masih dalam pengembangan dengan logo */}
+
+        <div className="card flex-1 p-20 rounded-md flex items-center justify-center border bg-red-700 mt-10 text-white">
+          <span class="loading loading-ring loading-lg"></span>
+          <h2>Under Development</h2>
+        </div>
       </div>
     </>
   );
