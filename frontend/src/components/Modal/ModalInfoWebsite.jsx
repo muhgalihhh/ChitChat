@@ -8,7 +8,7 @@ const ModalInfoWebsite = ({ isOpen, onClose }) => {
 
   return (
     <dialog id="modalInfoWebsite" className={`modal ${isOpen ? 'modal-open' : 'modal-close'} transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-      <div className="modal-box p-10 bg-white rounded-lg shadow-lg w-6/12 max-w-5xl">
+      <div className="modal-box p-10 bg-white rounded-lg shadow-lg w-6/12 max-w-5xl sm:w-10/12 md:w-9/12 lg:w-8/12 xl:w-7/12">
         <div className="modal-header flex justify-between items-center">
           <div className="title flex gap-2">
             <h3 className="text-lg font-bold text-gray-800">About This Website</h3>
@@ -22,7 +22,7 @@ const ModalInfoWebsite = ({ isOpen, onClose }) => {
         </div>
         <div className="modal-body mt-4 text-gray-700">
           <p className="mb-5">This website is built by:</p>
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="flex gap-4 mb-4">
             {creators.map((creator, index) => (
               <div key={index} className="flex items-center justify-between gap-4 shadow-sm border rounded-md px-3">
                 <div className="flex gap-2 items-center">
