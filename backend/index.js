@@ -11,15 +11,6 @@ import messageRoutes from './routes/message.routes.js';
 import userRoutes from './routes/user.routes.js';
 import { app, server } from './socket/socket.js';
 
-const corsOptions = {
-  origin: 'https://chitchat-835v.onrender.com',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204,
-};
-
-app.use(cors(corsOptions));
-
 const __dirname = path.resolve();
 
 dotenv.config();
