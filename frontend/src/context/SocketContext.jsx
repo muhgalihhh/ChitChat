@@ -1,9 +1,6 @@
-import dotnev from 'dotenv';
 import { createContext, useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { useAuthContext } from './AuthContext';
-
-dotnev.config();
 
 const SocketContext = createContext();
 export const useSocketContext = () => {
@@ -16,7 +13,7 @@ export const SocketContextProvider = ({ children }) => {
   const { authUser } = useAuthContext();
   useEffect(() => {
     if (authUser) {
-      const socket = io(process.env.SOCKET_APP_URL, {
+      const socket = io('https://chitchat-835v.onrender.com/', {
         query: {
           userId: authUser._id,
         },
