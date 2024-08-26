@@ -44,7 +44,7 @@ const ModalInfoWebsite = ({ isOpen, onClose }) => {
               <span className="ml-2">React</span>
             </div>
             <div className="flex items-center">
-              <img className="w-12" src="https://static-00.iconduck.com/assets.00/mongodb-original-wordmark-icon-1008x1024-ebdbwvkl.png" alt="MongoDB" />
+              <img className="w-12" src="/img/mongodb.png" alt="MongoDB" />
               <span className="ml-2">MongoDB</span>
             </div>
             <div className="flex items-center">
@@ -52,15 +52,15 @@ const ModalInfoWebsite = ({ isOpen, onClose }) => {
               <span className="ml-2">Express</span>
             </div>
             <div className="flex items-center">
-              <img className="w-12" src="https://static-00.iconduck.com/assets.00/node-js-icon-454x512-nztofx17.png" alt="Node.js" />
+              <img className="w-12" src="/img/nodejs.png" alt="Node.js" />
               <span className="ml-2">Node.js</span>
             </div>
             <div className="flex items-center">
-              <img className="w-12" src="https://static-00.iconduck.com/assets.00/socket-io-icon-1024x1023-qk25cbjb.png" alt="Socket.js" />
-              <span className="ml-2">Socket.js</span>
+              <img className="w-12" src="/img/Socket.IO_.webp" alt="Socket.js" />
+              <span className="ml-2">Socket.Io</span>
             </div>
             <div className="flex items-center">
-              <img className="w-12" src="https://static-00.iconduck.com/assets.00/tailwind-css-icon-2048x1229-u8dzt4uh.png" alt="Tailwind CSS" />
+              <img className="w-12" src="/img/tailwind.jpeg" alt="Tailwind CSS" />
               <span className="ml-2">Tailwind CSS</span>
             </div>
           </div>
