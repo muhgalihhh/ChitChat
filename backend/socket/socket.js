@@ -6,15 +6,6 @@ import { Server } from 'socket.io';
 const app = express();
 
 const server = http.createServer(app);
-const corsOptions = {
-  origin: ['http://localhost:3000', 'https://chitchat-835v.onrender.com'],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204,
-};
-
-app.use(cors(corsOptions));
-
 const io = new Server(server, {
   cors: {
     origin: ['http://localhost:3000', 'https://chitchat-835v.onrender.com'],
