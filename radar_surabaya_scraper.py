@@ -18,28 +18,113 @@ import ssl
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+# Tambahan untuk bypass CloudFlare dan proteksi
+try:
+    from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+except ImportError:
+    print("⚠️ Beberapa modul tambahan tidak tersedia, menggunakan metode standar")
+
 class RadarSurabayaScraper:
     """Scraper untuk mengambil data berita dari RadarSurabaya.JawaPos.com"""
 
     def __init__(self):
-        """Inisialisasi session dan headers"""
+        """Inisialisasi session dan headers dengan teknik anti-detection advanced"""
         self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
+        
+        # Rotasi User-Agent untuk menghindari deteksi
+        self.user_agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15'
+        ]
+        
+        # Setup headers yang lebih lengkap dan realistis
+        self.setup_headers()
+        
+        # Base URL untuk website
+        self.base_url = "https://radarsurabaya.jawapos.com"
+        
+        # Cookie jar untuk menyimpan session
+        self.session.cookies.clear()
+        
+        # Setup retry strategy yang lebih robust
+        retry_strategy = Retry(
+            total=3,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        self.session.mount("http://", adapter)
+        self.session.mount("https://", adapter)
+        
+        print("🔧 Session initialized dengan advanced anti-detection")
+    
+    def setup_headers(self):
+        """Setup headers yang rotasi dan realistis"""
+        user_agent = random.choice(self.user_agents)
+        
+        headers = {
+            'User-Agent': user_agent,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,ms;q=0.6',
             'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
             'Connection': 'keep-alive',
             'Upgrade-Insecure-Requests': '1',
             'Sec-Fetch-Dest': 'document',
             'Sec-Fetch-Mode': 'navigate',
             'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
             'Cache-Control': 'max-age=0',
-            'Referer': 'https://radarsurabaya.jawapos.com/'
-        })
+            'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"'
+        }
         
-        # Base URL untuk website
-        self.base_url = "https://radarsurabaya.jawapos.com"
+        self.session.headers.clear()
+        self.session.headers.update(headers)
+    
+    def simulate_browser_visit(self):
+        """Simulasi kunjungan browser normal ke homepage terlebih dahulu"""
+        try:
+            print("🌐 Mengakses homepage untuk simulasi browser...")
+            
+            # Reset headers
+            self.setup_headers()
+            
+            # Kunjungi homepage dulu
+            homepage_response = self.session.get(
+                self.base_url, 
+                timeout=15,
+                allow_redirects=True,
+                verify=False
+            )
+            
+            if homepage_response.status_code == 200:
+                print("✅ Homepage berhasil diakses")
+                
+                # Ambil cookies yang diberikan
+                print(f"🍪 Cookies diterima: {len(self.session.cookies)} cookies")
+                
+                # Update referer untuk request selanjutnya
+                self.session.headers.update({
+                    'Referer': self.base_url + '/'
+                })
+                
+                # Delay setelah homepage
+                time.sleep(random.uniform(3, 6))
+                return True
+            else:
+                print(f"⚠️ Homepage response: {homepage_response.status_code}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Error mengakses homepage: {e}")
+            return False
 
     def get_search_url(self, keyword):
         """
@@ -52,32 +137,77 @@ class RadarSurabayaScraper:
         print(f"🔍 URL Pencarian yang Dibuat: {search_url}")
         return search_url
 
-    def get_page_content(self, url, max_retries=3):
+    def get_page_content(self, url, max_retries=3, is_search=False):
         """
-        Mendapatkan konten halaman dengan retry mechanism dan delay acak
+        Mendapatkan konten halaman dengan teknik advanced anti-detection
         """
         for attempt in range(max_retries):
             try:
                 print(f"🔄 Mengakses halaman (Percobaan {attempt + 1})...")
-                # Delay acak sebelum request untuk menghindari deteksi bot
-                time.sleep(random.uniform(2, 5))
-
-                response = self.session.get(url, timeout=15, verify=False)
-                response.raise_for_status()
-
-                if response.status_code == 200 and len(response.content) > 1000:
-                    print(f"✅ Berhasil mengakses halaman (Size: {len(response.content):,} bytes)")
-                    return response
+                
+                # Rotasi User-Agent setiap percobaan
+                self.setup_headers()
+                
+                # Update referer berdasarkan konteks
+                if is_search:
+                    self.session.headers.update({
+                        'Referer': self.base_url + '/',
+                        'Sec-Fetch-Site': 'same-origin'
+                    })
                 else:
-                    print(f"⚠️ Response tidak normal: Status {response.status_code}, Size: {len(response.content):,} bytes")
+                    self.session.headers.update({
+                        'Referer': self.base_url + '/search',
+                        'Sec-Fetch-Site': 'same-origin'
+                    })
+                
+                # Delay yang lebih bervariasi
+                delay = random.uniform(5, 10) if attempt > 0 else random.uniform(2, 4)
+                time.sleep(delay)
+                
+                # Request dengan parameter tambahan
+                response = self.session.get(
+                    url, 
+                    timeout=20,
+                    verify=False,
+                    allow_redirects=True,
+                    stream=False
+                )
+                
+                print(f"📊 Response Status: {response.status_code}")
+                print(f"📊 Response Size: {len(response.content):,} bytes")
+                print(f"📊 Response Headers: {dict(list(response.headers.items())[:3])}")
+                
+                if response.status_code == 200:
+                    if len(response.content) > 1000:
+                        print(f"✅ Berhasil mengakses halaman")
+                        return response
+                    else:
+                        print(f"⚠️ Response terlalu kecil, mungkin halaman kosong")
+                elif response.status_code == 403:
+                    print(f"🚫 403 Forbidden - Mencoba teknik bypass...")
+                    # Coba dengan headers yang berbeda
+                    if attempt < max_retries - 1:
+                        self.simulate_browser_visit()
+                elif response.status_code == 404:
+                    print(f"❌ 404 Not Found - URL mungkin tidak valid")
+                    break
+                else:
+                    print(f"⚠️ Status code tidak terduga: {response.status_code}")
 
+            except requests.exceptions.Timeout:
+                print(f"⏱️ Timeout pada percobaan {attempt + 1}")
+            except requests.exceptions.ConnectionError:
+                print(f"🔌 Connection error pada percobaan {attempt + 1}")
             except requests.exceptions.RequestException as e:
                 print(f"❌ Request error: {e} (Percobaan {attempt + 1})")
 
+            # Delay progresif untuk retry
             if attempt < max_retries - 1:
-                time.sleep(random.uniform(10, 20))
+                retry_delay = random.uniform(15, 30) * (attempt + 1)
+                print(f"⏳ Menunggu {retry_delay:.1f} detik sebelum retry...")
+                time.sleep(retry_delay)
 
-        print("❌ Gagal mengakses halaman setelah beberapa percobaan")
+        print("❌ Gagal mengakses halaman setelah semua percobaan")
         return None
 
     def filter_articles_by_keyword(self, articles_data, keyword):
@@ -369,22 +499,54 @@ class RadarSurabayaScraper:
 
         return date_published, content_text
 
+    def try_alternative_search_methods(self, keyword):
+        """
+        Mencoba metode pencarian alternatif jika metode utama gagal
+        """
+        print("🔄 Mencoba metode pencarian alternatif...")
+        
+        alternative_urls = [
+            f"{self.base_url}/tag/{keyword.replace(' ', '-')}",  # Tag-based search
+            f"{self.base_url}/category/ekonomi",  # Category search untuk keyword ekonomi
+            f"{self.base_url}/",  # Homepage untuk scraping artikel terbaru
+        ]
+        
+        for i, alt_url in enumerate(alternative_urls, 1):
+            print(f"🔍 Alternatif {i}: {alt_url}")
+            response = self.get_page_content(alt_url, max_retries=2)
+            if response:
+                print(f"✅ Berhasil mengakses alternatif {i}")
+                return response, alt_url
+        
+        return None, None
+
     def scrape_radar_surabaya_news(self, keyword, max_articles=50):
         """
-        Scraping berita dari RadarSurabaya berdasarkan keyword
+        Scraping berita dari RadarSurabaya berdasarkan keyword dengan teknik advanced
         """
         print(f"🚀 MEMULAI SCRAPING BERITA RADAR SURABAYA UNTUK KEYWORD: '{keyword}'")
         print(f"📊 Target: {max_articles} artikel maksimal")
         start_time = datetime.now()
 
+        # Tahap 0: Simulasi browser visit ke homepage
+        print("\n🌐 TAHAP 0: Simulasi kunjungan browser...")
+        if not self.simulate_browser_visit():
+            print("⚠️ Gagal mengakses homepage, tetapi melanjutkan...")
+
         # Tahap 1: Dapatkan hasil pencarian
         print("\n🔍 TAHAP 1: Mengakses halaman pencarian...")
         search_url = self.get_search_url(keyword)
-        response = self.get_page_content(search_url)
+        response = self.get_page_content(search_url, max_retries=3, is_search=True)
 
+        # Jika gagal, coba metode alternatif
         if not response:
-            print("❌ Gagal mengakses halaman pencarian")
-            return pd.DataFrame()
+            print("🔄 Mencoba metode pencarian alternatif...")
+            response, used_url = self.try_alternative_search_methods(keyword)
+            if response:
+                print(f"✅ Berhasil dengan metode alternatif: {used_url}")
+            else:
+                print("❌ Semua metode pencarian gagal")
+                return pd.DataFrame()
 
         # Tahap 2: Ekstrak link artikel dari hasil pencarian
         print("\n📋 TAHAP 2: Mengekstrak link artikel...")
@@ -392,7 +554,15 @@ class RadarSurabayaScraper:
 
         if not article_links:
             print("❌ Tidak menemukan artikel yang relevan")
-            return pd.DataFrame()
+            # Coba scraping artikel terbaru dari homepage
+            print("🔄 Mencoba scraping artikel terbaru dari homepage...")
+            homepage_response = self.get_page_content(self.base_url)
+            if homepage_response:
+                article_links = self.extract_article_links_from_search(homepage_response.text, keyword)
+            
+            if not article_links:
+                print("❌ Tetap tidak menemukan artikel yang relevan")
+                return pd.DataFrame()
 
         print(f"✅ Berhasil menemukan {len(article_links)} artikel yang relevan")
 
@@ -426,9 +596,11 @@ class RadarSurabayaScraper:
                     'detail_konten': f"Error: {str(e)}"
                 })
 
-            # Delay antar artikel
+            # Delay antar artikel yang lebih bervariasi
             if i < target_count:
-                time.sleep(random.uniform(3, 6))
+                delay = random.uniform(5, 10)
+                print(f"   ⏳ Delay {delay:.1f} detik...")
+                time.sleep(delay)
 
         end_time = datetime.now()
         duration = end_time - start_time
