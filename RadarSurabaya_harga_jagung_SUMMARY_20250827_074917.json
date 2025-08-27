@@ -1,0 +1,20 @@
+{
+  "scraping_metadata": {
+    "keyword": "harga jagung",
+    "timestamp": "2025-08-27T07:49:17.357355",
+    "total_articles": 6,
+    "sources": {
+      "google_news": 6
+    },
+    "success_rate": 100.0,
+    "average_content_length": 751.0
+  },
+  "quality_metrics": {
+    "articles_with_content": 6,
+    "unique_sources": 1,
+    "date_range": {
+      "earliest": "1 Agustus 2025",
+      "latest": "21 Juni 2025"
+    }
+  }
+}
